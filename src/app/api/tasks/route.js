@@ -1,31 +1,37 @@
 import { prisma } from "@/libs/prisma";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
-    const tasks = await prisma.task.findMany();
+    const token = await getToken({ req });
+    if (!token || !token.id) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const tasks = await prisma.task.findMany({
+      where: { userId: parseInt(token.id, 10) },
+    });
     return NextResponse.json({
       msj: "Estás en la función GET desde backend",
       tasks,
     });
   } catch (error) {
     console.log(error);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
 }
 
 export async function POST(req) {
   try {
-    const data = await req.json();
-    console.log("DATA RECIBIDA EN EL SERVIDOR:", data);
-
-    const { title, description, userId } = data;
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: "El campo userId es obligatorio" },
-        { status: 400 }
-      );
+    const token = await getToken({ req });
+    if (!token || !token.id) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
+    const data = await req.json();
+    console.log("DATA RECIBIDA EN EL SERVIDOR (ignora userId):", data);
+
+    const { title, description } = data;
+    const userId = parseInt(token.id, 10);
 
     const newTask = await prisma.task.create({
       data: {

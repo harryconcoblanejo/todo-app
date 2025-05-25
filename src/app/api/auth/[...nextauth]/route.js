@@ -28,10 +28,11 @@ export const authOptions = {
           throw new Error("Contraseña incorrecta");
         }
 
-        // Devuelve el usuario para la sesión
+        // Devuelve el usuario completo para la sesión
         return {
           id: user.id,
           email: user.email,
+          name: user.name, // Incluye el nombre si existe
         };
       },
     }),
@@ -39,22 +40,29 @@ export const authOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      // Cuando inicia sesión, agregar el id al token JWT
       if (user) {
         token.id = user.id;
+        token.name = user.name ?? null;
+        token.picture = user.image ?? null;
       }
+
+      console.log("jwt token:", token);
       return token;
     },
     async session({ session, token }) {
-      // Agregar el id al objeto session para usar en el cliente
-      if (token) {
-        session.user.id = token.id;
-      }
-      console.log("aqui estoy session", session);
-      return await session;
+      console.log("session callback - token:", token);
+
+      return {
+        user: {
+          name: token.name ?? null,
+          email: token.email,
+          image: token.picture ?? null,
+          id: token.id, // ← el campo que necesitás
+        },
+        expires: session.expires,
+      };
     },
   },
-
   session: {
     strategy: "jwt",
   },
