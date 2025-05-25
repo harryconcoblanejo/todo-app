@@ -1,4 +1,3 @@
-// NavbarClient.jsx
 "use client";
 
 import Link from "next/link";
@@ -8,8 +7,9 @@ import SignOutButton from "./SignOutButton";
 export default function NavbarClient({ session }) {
   const [menuOpen, setMenuOpen] = useState(false);
   console.log("consoleando session", session);
+
   return (
-    <nav className="bg-slate-900 p-4 flex  items-center relative ">
+    <nav className="bg-slate-900 p-4 flex items-center relative">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"
@@ -50,10 +50,10 @@ export default function NavbarClient({ session }) {
         {/* Contenedor de enlaces */}
         <div
           className={`flex flex-col sm:flex-row sm:items-center sm:justify-end sm:space-x-4
-    absolute sm:static top-full w-full bg-slate-900 sm:bg-transparent 
-    transition-all duration-300 overflow-hidden
-    ${menuOpen ? "max-h-screen py-4 sm:max-h-full sm:py-0" : "max-h-0 sm:max-h-full"}
-  `}
+            absolute sm:static top-full left-0 right-0 mx-auto max-w-xs sm:max-w-full w-full sm:w-auto bg-slate-900 sm:bg-transparent 
+            transition-all duration-300 overflow-hidden
+            ${menuOpen ? "max-h-screen py-4 sm:max-h-full sm:py-0" : "max-h-0 sm:max-h-full"}
+          `}
         >
           {session ? (
             // Usuario logueado
@@ -67,13 +67,7 @@ export default function NavbarClient({ session }) {
               >
                 New Task
               </Link>
-              {/* <Link
-                href="/about"
-                className="text-white hover:text-slate-200 px-3 py-2 rounded transition"
-                onClick={() => setMenuOpen(false)}
-              >
-                About
-              </Link> */}
+
               <div className="px-3 py-2">
                 <SignOutButton />
               </div>
@@ -83,14 +77,14 @@ export default function NavbarClient({ session }) {
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 sm:justify-end w-full">
               <Link
                 href="/login"
-                className="text-white border border-white px-3 py-2 rounded hover:bg-white hover:text-slate-900 transition cursor-pointer"
+                className="text-white border border-white px-2 py-1 text-sm rounded hover:bg-white hover:text-slate-900 transition cursor-pointer w-fit"
                 onClick={() => setMenuOpen(false)}
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="text-white border border-white px-3 py-2 rounded hover:bg-white hover:text-slate-900 transition cursor-pointer"
+                className="text-white border border-white px-2 py-1 text-sm rounded hover:bg-white hover:text-slate-900 transition cursor-pointer w-fit"
                 onClick={() => setMenuOpen(false)}
               >
                 Register
