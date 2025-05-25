@@ -6,8 +6,13 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 
 async function getTasks(userId) {
+  console.log("a ver el userId", userId);
+  if (!userId) return [];
   return await prisma.task.findMany({
-    where: { userId },
+    where: {
+      userId: Number(userId),
+    },
+    orderBy: { createdAt: "desc" },
   });
 }
 
