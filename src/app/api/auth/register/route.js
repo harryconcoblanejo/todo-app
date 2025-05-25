@@ -32,6 +32,7 @@ export async function POST(request) {
       status: 201,
     });
   } catch (error) {
+    console.log("error creando usuario", error);
     return new Response(
       JSON.stringify({ message: "Error interno", detail: error.message }),
       {
