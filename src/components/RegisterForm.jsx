@@ -20,7 +20,8 @@ export default function RegisterForm() {
       const data = await res.json();
       console.log("flag2");
       if (!res.ok) {
-        console.log("algun error de mierda");
+        console.log("algun error de mierda", data);
+
         setMessage(data.message || "Error desconocido");
       } else {
         setMessage(data.message);
