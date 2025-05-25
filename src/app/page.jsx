@@ -31,7 +31,7 @@ const HomePage = async () => {
           className="text-center text-lg font-semibold coursor-pointer flex justify-center"
           href={"/new"}
         >
-          Crear alguna tarea
+          Create Task
         </Link>
       ) : (
         <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-3 items-center justify-center ">
