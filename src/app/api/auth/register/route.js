@@ -32,9 +32,11 @@ export async function POST(request) {
       status: 201,
     });
   } catch (error) {
-    return new Response(JSON.stringify({ message: "Error interno" }), {
-      status: 500,
-      error: error.message,
-    });
+    return new Response(
+      JSON.stringify({ message: "Error interno", detail: error.message }),
+      {
+        status: 500,
+      }
+    );
   }
 }
