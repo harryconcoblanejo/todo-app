@@ -16,10 +16,11 @@ export default function RegisterForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+      console.log("flag1");
       const data = await res.json();
-
+      console.log("flag2");
       if (!res.ok) {
+        console.log("algun error de mierda");
         setMessage(data.message || "Error desconocido");
       } else {
         setMessage(data.message);
@@ -27,6 +28,7 @@ export default function RegisterForm() {
         setPassword("");
       }
     } catch (error) {
+      console.log("flag3");
       setMessage("Error de conexión");
       console.log(error);
       console.log("culo");
