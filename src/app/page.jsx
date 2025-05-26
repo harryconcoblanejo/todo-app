@@ -20,10 +20,6 @@ const HomePage = async () => {
   console.log("flag1");
   const session = await getServerSession(authOptions);
 
-  // Debug: muestra la sesión completa y el id del usuario
-  console.log("session:", session);
-  console.log("session.user?.id:", session?.user?.id);
-  console.log("flag2");
   if (!session || !session.user?.id) {
     return (
       <section className="container mx-auto p-4 mt-4">
@@ -31,10 +27,9 @@ const HomePage = async () => {
       </section>
     );
   }
-  console.log("flag3");
+
   const data = await getTasks(session.user.id);
-  console.log("Tareas obtenidas:", data);
-  console.log("flag4");
+
   return (
     <section className="container mx-auto border-2 border-slate-900 rounded-lg p-4 mt-4">
       {data.length === 0 ? (
