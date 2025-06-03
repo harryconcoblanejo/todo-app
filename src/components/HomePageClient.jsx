@@ -24,7 +24,7 @@ const HomePageClient = () => {
       <span className="inline-block w-10 h-10 border-4 border-slate-400 border-t-slate-900 rounded-full animate-spin" />
     </div>
   );
-  if (tasks.length === 0) return <div>No hay tareas</div>;
+  if (tasks.length === 0) return <div className="text-center text-2xl font-bold text-slate-950">Create your first task!</div>;
 
   return <TaskListDndKit tasks={tasks} />;
 };
