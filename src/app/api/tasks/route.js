@@ -30,13 +30,14 @@ export async function POST(req) {
     const data = await req.json();
     console.log("DATA RECIBIDA EN EL SERVIDOR (ignora userId):", data);
 
-    const { title, description } = data;
+    const { title, description, color } = data;
     const userId = parseInt(token.id, 10);
 
     const newTask = await prisma.task.create({
       data: {
         title,
         description,
+        color, // Permite crear tarea con color si se provee
         user: {
           connect: { id: userId },
         },

@@ -25,6 +25,7 @@ model Task {
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  color       String?  @default("bg-slate-900") // Color de la tarjeta
 
   // Relación con el usuario
   userId Int

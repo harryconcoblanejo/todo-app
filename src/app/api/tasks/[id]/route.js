@@ -56,7 +56,10 @@ export async function PUT(req, context) {
 
     const updatedTask = await prisma.task.update({
       where: { id: parsedId },
-      data,
+      data: {
+        ...data,
+        color: data.color ?? task.color, // Si no se manda color, mantiene el actual
+      },
     });
 
     return NextResponse.json({
