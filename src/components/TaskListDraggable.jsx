@@ -65,7 +65,7 @@ const TaskListDraggable = ({ tasks }) => {
   console.log("ITEMS EN EL CLIENTE", items.map(t => t.id));
 
   if (!isClient || !hasValidIds(items)) {
-    return <div>Cargando tareas...</div>;
+    return <div>Loading Tasks!...</div>;
   }
 
   return (

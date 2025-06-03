@@ -39,7 +39,7 @@ const TaskCard = ({ task }) => {
   return (
     <div
       key={task.id}
-      className={`${cardColor} p-3 border border-gray-700 rounded-lg transition-colors cursor-pointer max-w-full overflow-hidden flex`}
+      className={`${cardColor} p-3 border border-gray-700 rounded-lg transition-colors cursor-pointer max-w-full  overflow-hidden flex`}
       onClick={handleClick}
     >
       {/* Barra lateral de colores */}

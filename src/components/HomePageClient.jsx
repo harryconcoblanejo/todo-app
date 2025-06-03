@@ -19,7 +19,11 @@ const HomePageClient = () => {
       });
   }, []);
 
-  if (loading) return <div>Cargando tareas...</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[40vh] w-full">
+      <span className="inline-block w-10 h-10 border-4 border-slate-400 border-t-slate-900 rounded-full animate-spin" />
+    </div>
+  );
   if (tasks.length === 0) return <div>No hay tareas</div>;
 
   return <TaskListDndKit tasks={tasks} />;
