@@ -37,39 +37,37 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-4 border rounded"
+      className="max-w-md mx-auto border p-6 rounded shadow space-y-4 bg-slate-700/70"
     >
-      <h2 className="text-2xl mb-4">Crear cuenta</h2>
-
-      <label className="block mb-2">
-        Email:
+      <h1 className="text-2xl font-bold mb-2">Create account</h1>
+      <div>
+        <label className="block text-sm">Email</label>
         <input
+          name="email"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border px-3 py-2 rounded"
         />
-      </label>
-
-      <label className="block mb-4">
-        Contraseña:
+      </div>
+      <div>
+        <label className="block text-sm">Password</label>
         <input
+          name="password"
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border px-3 py-2 rounded"
         />
-      </label>
-
+      </div>
       <button
         type="submit"
-        className="bg-slate-900 text-white px-4 py-2 rounded hover:bg-slate-700 transition"
+        className="bg-slate-900 text-white px-4 py-2 rounded hover:bg-slate-700 cursor-pointer"
       >
-        Registrar
+        Register
       </button>
-
       {message && (
         <p
           className={`mt-4 font-semibold ${message.includes("creado") ? "text-green-600" : "text-red-600"}`}

@@ -49,7 +49,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto border p-6 rounded shadow space-y-4"
+      className="max-w-md mx-auto border p-6 rounded shadow space-y-4 bg-slate-700/70"
     >
       <h1 className="text-2xl font-bold mb-2">Login</h1>
       {error && <p className="text-red-600">{error}</p>}
