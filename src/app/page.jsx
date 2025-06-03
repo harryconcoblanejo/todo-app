@@ -22,8 +22,7 @@ const HomePage = async () => {
 
   if (!session || !session.user?.id) {
     return (
-      <section className="container mx-auto p-4 mt-4 flex flex-col items-center justify-center min-h-[40vh]">
-        <img src="/pexels-suzyhazelwood-1226398.jpg" alt="Welcome" className="max-w-3xl w-full rounded-lg shadow-lg" />
+      <section className="container mx-auto p-4 mt-32 flex flex-col items-center justify-center min-h-[40vh]">
         <div className="mt-6 text-center bg-white/80 rounded-lg px-6 py-4 shadow">
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome to the task app</h1>
           <p className="text-slate-800">Create an account and start organizing your days!</p>
