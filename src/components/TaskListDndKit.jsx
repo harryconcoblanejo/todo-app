@@ -91,7 +91,7 @@ const TaskListDndKit = ({ tasks }) => {
         items={items.map(t => t.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-3 items-center justify-center">
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4 gap-y-6 items-stretch justify-center px-2">
           {items.map((task) => (
             <SortableItem key={task.id} id={task.id} task={task} />
           ))}

@@ -45,7 +45,7 @@ const HomePage = async () => {
   {/* Overlay de transparencia */}
   <div className="absolute inset-0 bg-black/40 z-10" />
   {/* Contenido principal */}
-  <div className="relative z-20 w-full container mx-auto rounded-lg p-4 mt-4 bg-white/30">
+  <div className="relative z-20 w-full flex justify-center items-center min-h-[80vh] container mx-auto rounded-lg p-4 mt-4 bg-white/30 max-w-4xl">
     <HomePageClient />
   </div>
 </section>

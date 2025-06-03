@@ -73,9 +73,9 @@ const EditPage = ({ params }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <form
-        className="bg-slate-700 p-10 rounded-lg w-full max-w-lg"
+        className="bg-slate-700/70 p-10 rounded-lg w-full max-w-lg"
         onSubmit={e => {
           e.preventDefault();
           handleUpdate({ title, description });

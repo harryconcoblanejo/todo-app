@@ -14,11 +14,22 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SessionWrapper>
-          <Navbar />
-          {children}
-        </SessionWrapper>
+      <body className={inter.className + " relative min-h-screen"}>
+        {/* Fondo de imagen y overlay en todas las pantallas */}
+        <div className="fixed inset-0 w-full h-full z-0">
+          <img
+            src="/pexels-suzyhazelwood-1226398.jpg"
+            alt="Background"
+            className="w-full h-full object-cover absolute inset-0"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="relative z-10">
+          <SessionWrapper>
+            <Navbar />
+            {children}
+          </SessionWrapper>
+        </div>
       </body>
     </html>
   );
