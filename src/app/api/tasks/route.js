@@ -10,6 +10,7 @@ export async function GET(req) {
     }
     const tasks = await prisma.task.findMany({
       where: { userId: parseInt(token.id, 10) },
+      orderBy: { order: "asc" },
     });
     return NextResponse.json({
       msj: "Estás en la función GET desde backend",
