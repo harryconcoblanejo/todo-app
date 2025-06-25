@@ -13,11 +13,13 @@ const EditPage = ({ params }) => {
   const [description, setDescription] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
 
     const fetchTask = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(`/api/tasks/${id}`, {
           method: "GET",
@@ -31,11 +33,15 @@ const EditPage = ({ params }) => {
         setDescription(data.task.description);
       } catch (error) {
         console.error("Fetch error:", error);
+        alert("Error al cargar la tarea");
+        router.push("/");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchTask();
-  }, [id]);
+  }, [id, router]);
 
   const handleUpdate = async ({ title, description }) => {
     setIsUpdating(true);
@@ -79,6 +85,18 @@ const EditPage = ({ params }) => {
       setIsDeleting(false);
     }
   };
+
+  // Mostrar loader mientras se cargan los datos
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="bg-slate-700/70 p-10 rounded-lg w-full max-w-lg flex flex-col items-center">
+          <span className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="text-white text-lg font-medium">Cargando tarea...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
