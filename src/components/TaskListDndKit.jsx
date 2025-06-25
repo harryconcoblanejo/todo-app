@@ -56,6 +56,7 @@ function SortableItem({ task, id }) {
 
 const TaskListDndKit = ({ tasks }) => {
   const [items, setItems] = useState(tasks);
+  const [isReordering, setIsReordering] = useState(false);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
@@ -63,41 +64,63 @@ const TaskListDndKit = ({ tasks }) => {
   const handleDragEnd = async (event) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
+    
     const oldIndex = items.findIndex(t => t.id === active.id);
     const newIndex = items.findIndex(t => t.id === over.id);
     const newItems = arrayMove(items, oldIndex, newIndex);
     setItems(newItems);
-    // Actualizar el orden en la base de datos (opcional)
+    
+    // Actualizar el orden en la base de datos
+    setIsReordering(true);
     try {
-      await fetch("/api/tasks/order", {
+      const res = await fetch("/api/tasks/order", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tasks: newItems.map((task, idx) => ({ id: task.id, order: idx })),
         }),
       });
+      
+      if (!res.ok) {
+        throw new Error("Error al actualizar el orden");
+      }
     } catch (e) {
       console.error("[TaskListDndKit] Error al actualizar el orden:", e);
+      // Revertir el orden si hay error
+      setItems(tasks);
+    } finally {
+      setIsReordering(false);
     }
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={items.map(t => t.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4 gap-y-6 items-stretch justify-center px-2">
-          {items.map((task) => (
-            <SortableItem key={task.id} id={task.id} task={task} />
-          ))}
+    <div className="relative">
+      {isReordering && (
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-50 rounded-lg">
+          <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-3">
+            <span className="inline-block w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <span className="text-gray-700 font-medium">Actualizando orden...</span>
+          </div>
         </div>
-      </SortableContext>
-    </DndContext>
+      )}
+      
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={items.map(t => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4 gap-y-6 items-stretch justify-center px-2">
+            {items.map((task) => (
+              <SortableItem key={task.id} id={task.id} task={task} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
   );
 };
 

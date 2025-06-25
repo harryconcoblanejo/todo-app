@@ -21,16 +21,23 @@ const TaskCard = ({ task }) => {
 
   // Cambia el color y lo guarda en la base de datos
   const handleColorChange = async (color) => {
+    if (loading) return; // Prevenir múltiples clicks
     setLoading(true);
     setCardColor(color);
     try {
-      await fetch(`/api/tasks/${task.id}`, {
+      const res = await fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ color }),
       });
+      
+      if (!res.ok) {
+        throw new Error("Error al actualizar el color");
+      }
     } catch (e) {
-      // Manejo de error opcional
+      console.error("Error al cambiar color:", e);
+      // Revertir el color si hay error
+      setCardColor(task.color || "bg-slate-900");
     } finally {
       setLoading(false);
     }
@@ -39,9 +46,18 @@ const TaskCard = ({ task }) => {
   return (
     <div
       key={task.id}
-      className={`${cardColor} p-3 border border-gray-700 rounded-lg transition-colors cursor-pointer max-w-xs w-full mx-auto overflow-hidden flex`}
+      className={`${cardColor} p-3 border border-gray-700 rounded-lg transition-colors cursor-pointer max-w-xs w-full mx-auto overflow-hidden flex relative ${
+        loading ? "opacity-75" : ""
+      }`}
       onClick={handleClick}
     >
+      {/* Overlay de loading */}
+      {loading && (
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
+          <span className="inline-block w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+      
       {/* Barra lateral de colores */}
       <div
         className="flex flex-col justify-center items-center mr-3"
@@ -50,8 +66,8 @@ const TaskCard = ({ task }) => {
         {colorOptions.map((opt) => (
           <button
             key={opt.color}
-            className={`${opt.color} w-5 h-5 rounded-full mb-2 border-2 border-white focus:outline-none ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
+            className={`${opt.color} w-5 h-5 rounded-full mb-2 border-2 border-white focus:outline-none transition-all ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:scale-110"
             }`}
             onClick={() => !loading && handleColorChange(opt.color)}
             title={opt.label}

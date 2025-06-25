@@ -11,6 +11,8 @@ const EditPage = ({ params }) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -36,6 +38,7 @@ const EditPage = ({ params }) => {
   }, [id]);
 
   const handleUpdate = async ({ title, description }) => {
+    setIsUpdating(true);
     try {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "PUT",
@@ -52,10 +55,13 @@ const EditPage = ({ params }) => {
     } catch (error) {
       console.error("Update error:", error);
       alert("Ocurrió un error al actualizar la tarea.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     try {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "DELETE",
@@ -69,6 +75,8 @@ const EditPage = ({ params }) => {
     } catch (error) {
       console.error("Delete error:", error);
       alert("Ocurrió un error al eliminar la tarea.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -91,6 +99,7 @@ const EditPage = ({ params }) => {
           className="border border-gray-400 bg-amber-50 text-black rounded-[5px] p-2 mb-4 w-full"
           onChange={e => setTitle(e.target.value)}
           value={title}
+          disabled={isUpdating || isDeleting}
         />
 
         <label htmlFor="description" className="font-bold text-sm text-white">
@@ -103,22 +112,47 @@ const EditPage = ({ params }) => {
           className="border border-gray-400 bg-amber-50 text-black rounded-[5px] p-2 w-full"
           onChange={e => setDescription(e.target.value)}
           value={description}
+          disabled={isUpdating || isDeleting}
         />
 
         <div className="flex items-center justify-between mt-4">
           <button
             type="submit"
-            className="bg-blue-600 text-white p-2 rounded-[5px] hover:bg-blue-700 transition-colors"
+            disabled={isUpdating || isDeleting}
+            className={`${
+              isUpdating 
+                ? "bg-blue-400 cursor-not-allowed" 
+                : "bg-blue-600 hover:bg-blue-700"
+            } text-white p-2 rounded-[5px] transition-colors flex items-center gap-2`}
           >
-            Guardar Cambios
+            {isUpdating ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Actualizando...
+              </>
+            ) : (
+              "Guardar Cambios"
+            )}
           </button>
 
           <button
             type="button"
-            className="bg-red-600 text-white p-2 rounded-[5px] hover:bg-red-700 transition-colors"
+            disabled={isUpdating || isDeleting}
             onClick={handleDelete}
+            className={`${
+              isDeleting 
+                ? "bg-red-400 cursor-not-allowed" 
+                : "bg-red-600 hover:bg-red-700"
+            } text-white p-2 rounded-[5px] transition-colors flex items-center gap-2`}
           >
-            Eliminar
+            {isDeleting ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Eliminando...
+              </>
+            ) : (
+              "Eliminar"
+            )}
           </button>
         </div>
       </form>

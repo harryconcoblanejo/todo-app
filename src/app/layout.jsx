@@ -3,6 +3,7 @@ import SessionWrapper from "@/components/SessionWrapper";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar/page";
+import { MenuProvider } from "@/contexts/MenuContext";
 
 export const metadata = {
   title: "Things to do",
@@ -26,8 +27,10 @@ export default function RootLayout({ children }) {
         </div>
         <div className="relative z-10">
           <SessionWrapper>
-            <Navbar />
-            {children}
+            <MenuProvider>
+              <Navbar />
+              {children}
+            </MenuProvider>
           </SessionWrapper>
         </div>
       </body>

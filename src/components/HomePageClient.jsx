@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import TaskListDndKit from "@/components/TaskListDndKit";
+import { useMenu } from "@/contexts/MenuContext";
 
 // Carga dinámica del componente para evitar SSR y errores de hidratación
 const TaskListDraggable = dynamic(() => import("@/components/TaskListDraggable"), { ssr: false });
@@ -9,6 +10,7 @@ const TaskListDraggable = dynamic(() => import("@/components/TaskListDraggable")
 const HomePageClient = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { menuOpen } = useMenu();
 
   useEffect(() => {
     fetch("/api/tasks")
@@ -26,7 +28,11 @@ const HomePageClient = () => {
   );
   if (tasks.length === 0) return <div className="text-center text-2xl font-bold text-slate-950">Create your first task!</div>;
 
-  return <TaskListDndKit tasks={tasks} />;
+  return (
+    <div className={`transition-all duration-300 ${menuOpen ? 'mt-32 sm:mt-0' : 'mt-0'}`}>
+      <TaskListDndKit tasks={tasks} />
+    </div>
+  );
 };
 
 export default HomePageClient;

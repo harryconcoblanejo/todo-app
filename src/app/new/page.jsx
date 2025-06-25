@@ -12,6 +12,8 @@ const NewPage = ({ params }) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -48,6 +50,7 @@ const NewPage = ({ params }) => {
       return;
     }
 
+    setIsSubmitting(true);
     const userId = session?.user?.id;
 
     try {
@@ -70,11 +73,15 @@ const NewPage = ({ params }) => {
     } catch (error) {
       console.error("Submit error:", error);
       alert("Ocurrió un error al guardar la tarea.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleDelete = async e => {
     e.preventDefault();
+    setIsDeleting(true);
+    
     try {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "DELETE",
@@ -88,6 +95,8 @@ const NewPage = ({ params }) => {
     } catch (error) {
       console.error("Delete error:", error);
       alert("Ocurrió un error al eliminar la tarea.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -107,6 +116,7 @@ const NewPage = ({ params }) => {
           className="border border-gray-400 bg-amber-50 text-black rounded-[5px] p-2 mb-4 w-full"
           onChange={e => setTitle(e.target.value)}
           value={title}
+          disabled={isSubmitting || isDeleting}
         />
 
         <label htmlFor="description" className="font-bold text-sm text-white">
@@ -119,23 +129,48 @@ const NewPage = ({ params }) => {
           className="border border-gray-400 bg-amber-50 text-black rounded-[5px] p-2 w-full"
           onChange={e => setDescription(e.target.value)}
           value={description}
+          disabled={isSubmitting || isDeleting}
         />
 
         <div className="flex items-center justify-between mt-4">
           <button
             type="submit"
-            className="bg-blue-600 text-white p-2 rounded-[5px] hover:bg-blue-700 transition-colors"
+            disabled={isSubmitting || isDeleting}
+            className={`${
+              isSubmitting 
+                ? "bg-blue-400 cursor-not-allowed" 
+                : "bg-blue-600 hover:bg-blue-700"
+            } text-white p-2 rounded-[5px] transition-colors flex items-center gap-2`}
           >
-            {id ? "Update" : "Create"}
+            {isSubmitting ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                {id ? "Actualizando..." : "Creando..."}
+              </>
+            ) : (
+              id ? "Update" : "Create"
+            )}
           </button>
 
           {id && (
             <button
               type="button"
-              className="bg-red-600 text-white p-2 rounded-[5px] hover:bg-red-700 transition-colors"
+              disabled={isSubmitting || isDeleting}
               onClick={handleDelete}
+              className={`${
+                isDeleting 
+                  ? "bg-red-400 cursor-not-allowed" 
+                  : "bg-red-600 hover:bg-red-700"
+              } text-white p-2 rounded-[5px] transition-colors flex items-center gap-2`}
             >
-              Delete
+              {isDeleting ? (
+                <>
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Eliminando...
+                </>
+              ) : (
+                "Eliminar"
+              )}
             </button>
           )}
         </div>
